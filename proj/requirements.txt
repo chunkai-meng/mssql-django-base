@@ -1,0 +1,10 @@
+django==2.1
+djangorestframework==3.8.2
+django-debug-toolbar==1.9.1
+protobuf==3.6.0
+django-redis
+mysqlclient
+pymysql
+coreapi
+django-cors-headers
+django-pyodbc-azure

@@ -1,0 +1,34 @@
+version: '3.6'
+
+services:
+    core:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: proj-web
+        environment:
+            DJANGO_SETTINGS_MODULE: proj.settings
+        command: python3 manage.py runserver 0.0.0.0:8000
+        depends_on:
+        - mssql
+        ports:
+        - "8000:8000"
+        networks:
+        - mssql
+        working_dir: /home/proj
+        volumes:
+        - ./proj:/home/proj
+        tty: true
+    mssql:
+        image: microsoft/mssql-server-linux:2017-latest
+        networks:
+        - mssql
+        ports:
+        - "1433:1433"
+        environment:
+        - ACCEPT_EULA=Y
+        - SA_PASSWORD=Password-123
+        - MSSQL_PID=Express
+
+networks:
+    mssql:
