@@ -1,35 +1,52 @@
 version: '3.6'
 
 services:
-    base:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: base-django-mssql
-        environment:
-            DJANGO_SETTINGS_MODULE: proj.settings.svr
-        command: python3 manage.py runserver 0.0.0.0:8000
-        depends_on:
-        - mssql
-        ports:
-        - "8000:8000"
-        networks:
-        - mssql
-        working_dir: /home/proj
-        volumes:
-        - ./proj:/home/proj
-        tty: true
-    mssql:
-        image: microsoft/mssql-server-linux:2017-latest
-        container_name: base-mssql
-        networks:
-        - mssql
-        ports:
-        - "1433:1433"
-        environment:
-        - ACCEPT_EULA=Y
-        - SA_PASSWORD=Password-123
-        - MSSQL_PID=Express
+  api:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    container_name: base-api
+    environment:
+        DJANGO_SETTINGS_MODULE: proj.settings.svr
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+    - "8080:8000"
+    networks:
+    - backend
+    working_dir: /home/proj
+    volumes:
+    - ./proj:/home/proj
+    tty: true
+
+  loc:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    container_name: base-loc
+    environment:
+        DJANGO_SETTINGS_MODULE: proj.settings.svr
+    command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+    - db
+    ports:
+    - "8081:8000"
+    networks:
+    - backend
+    working_dir: /home/proj
+    volumes:
+    - ./proj:/home/proj
+    tty: true
+
+  db:
+    image: microsoft/mssql-server-linux:2017-latest
+    networks:
+    - backend
+    ports:
+    - "1433:1433"
+    environment:
+    - ACCEPT_EULA=Y
+    - SA_PASSWORD=Password-123
+    - MSSQL_PID=Express
 
 networks:
-    mssql:
+    backend:

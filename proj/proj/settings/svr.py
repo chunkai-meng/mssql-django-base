@@ -5,7 +5,7 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'qif',
+        'NAME': 'sa',
         'USER': 'sa',
         'PASSWORD': 'Password-123',
         'HOST': 'mssql',
